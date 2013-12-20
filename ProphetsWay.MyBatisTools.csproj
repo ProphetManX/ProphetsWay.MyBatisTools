@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BaseDao.cs" />
     <Compile Include="EnumTypeHandler.cs" />
+    <Compile Include="IBaseDao.cs" />
     <Compile Include="MapperFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

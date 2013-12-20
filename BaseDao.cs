@@ -7,7 +7,7 @@ namespace ProphetsWay.MyBatisTools
 	{
 		protected ISqlMapper _mapper { get; set; }
 
-		protected BaseDao(Assembly assembly) : this(assembly.GenerateMapper()) { }
+		//protected BaseDao(Assembly assembly) : this(assembly.GenerateMapper()) { }
 
 		protected BaseDao(ISqlMapper mapper)
 		{
