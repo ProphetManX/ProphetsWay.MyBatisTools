@@ -1,4 +1,5 @@
-﻿using IBatisNet.DataMapper;
+﻿using System;
+using IBatisNet.DataMapper;
 
 namespace ProphetsWay.MyBatisTools
 {

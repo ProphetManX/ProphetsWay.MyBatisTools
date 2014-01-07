@@ -34,17 +34,26 @@ namespace ProphetsWay.MyBatisTools
 
 			if (ConfigurationManager.ConnectionStrings["MyBatisDBConnection"] != null)
 				builderProps.Add("connectionString", ConfigurationManager.ConnectionStrings["MyBatisDBConnection"].ConnectionString);
-			
+
 
 			var builder = new DomSqlMapBuilder { ValidateSqlMapConfig = true, Properties = builderProps };
-			
-			var mapper = builder.Configure(
-				string.Format("{0}{1}SqlMap.{2}.config",
-				              assemblyPath,
-				              Path.DirectorySeparatorChar,
-				              assemblyParts[assemblyLength - 2]));
-			
-			return mapper;
+
+			try
+			{
+				var mapper = builder.Configure(
+					string.Format("{0}{1}SqlMap.{2}.config",
+								  assemblyPath,
+								  Path.DirectorySeparatorChar,
+								  assemblyParts[assemblyLength - 2]));
+
+				return mapper;
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex, string.Format("There was a problem when generating the SqlMapper for {0}", assemblyName));
+
+				throw ex;
+			}
 		}
 	}
 }
