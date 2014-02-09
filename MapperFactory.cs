@@ -21,6 +21,10 @@ namespace ProphetsWay.MyBatisTools
 
 			var assemblyUri = new Uri(callingAssembly.CodeBase);
 			var assemblyFile = new FileInfo(assemblyUri.LocalPath);
+
+			if(assemblyFile.Directory == null)
+				throw new NullReferenceException(string.Format("There was a problem estabishing the Directory for the assembly file [{0}].", assemblyFile.FullName));
+
 			var assemblyPath = assemblyFile.Directory.FullName;
 			var assemblyParts = assemblyName.Split('.');
 			var assemblyLength = assemblyParts.Length;
@@ -52,7 +56,7 @@ namespace ProphetsWay.MyBatisTools
 			{
 				Logger.Error(ex, string.Format("There was a problem when generating the SqlMapper for {0}", assemblyName));
 
-				throw ex;
+				throw;
 			}
 		}
 	}

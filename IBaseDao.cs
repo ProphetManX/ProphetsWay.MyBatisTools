@@ -1,5 +1,4 @@
-﻿
-namespace ProphetsWay.MyBatisTools
+﻿namespace ProphetsWay.MyBatisTools
 {
 	/// <summary>
 	/// Requires that all IDaos require the basic CRUD calls

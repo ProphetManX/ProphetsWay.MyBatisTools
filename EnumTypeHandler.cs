@@ -3,7 +3,7 @@ using ProphetsWay.Utilities;
 
 namespace ProphetsWay.MyBatisTools
 {
-	public abstract	class EnumTypeHandler<T> :ITypeHandlerCallback
+	public abstract class EnumTypeHandler<T> : ITypeHandlerCallback
 	{
 		public void SetParameter(IParameterSetter setter, object parameter)
 		{

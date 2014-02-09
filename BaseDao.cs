@@ -1,15 +1,14 @@
-﻿using System;
-using IBatisNet.DataMapper;
+﻿using IBatisNet.DataMapper;
 
 namespace ProphetsWay.MyBatisTools
 {
 	public abstract class BaseDao
 	{
-		protected ISqlMapper _mapper { get; set; }
+		protected ISqlMapper Mapper { get; set; }
 
 		protected BaseDao(ISqlMapper mapper)
 		{
-			_mapper = mapper;
+			Mapper = mapper;
 		}
 	}
 
@@ -19,77 +18,81 @@ namespace ProphetsWay.MyBatisTools
 		protected BaseDao(ISqlMapper mapper)
 			: base(mapper)
 		{
-			_typeName = typeof(T).Name;
+			_typeName = typeof (T).Name;
 		}
 
 		private readonly string _typeName;
 
-		private string getStmtId;
-		protected string _getStmtId
+		private string _getStmtId;
+
+		protected string GetStmtId
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(getStmtId))
-					getStmtId = string.Format("{0}.Get{0}ById", _typeName);
+				if (string.IsNullOrEmpty(_getStmtId))
+					_getStmtId = string.Format("{0}.Get{0}ById", _typeName);
 
-				return getStmtId;
+				return _getStmtId;
 			}
 		}
 
-		private string insertStmtId;
-		protected string _insertStmtId
+		private string _insertStmtId;
+
+		protected string InsertStmtId
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(insertStmtId))
-					insertStmtId = string.Format("{0}.Insert{0}", _typeName);
+				if (string.IsNullOrEmpty(_insertStmtId))
+					_insertStmtId = string.Format("{0}.Insert{0}", _typeName);
 
-				return insertStmtId;
+				return _insertStmtId;
 			}
 		}
 
-		private string updateStmtId;
-		protected string _updateStmtId
+		private string _updateStmtId;
+
+		protected string UpdateStmtId
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(updateStmtId))
-					updateStmtId = string.Format("{0}.Update{0}", _typeName);
+				if (string.IsNullOrEmpty(_updateStmtId))
+					_updateStmtId = string.Format("{0}.Update{0}", _typeName);
 
-				return updateStmtId;
+				return _updateStmtId;
 			}
 		}
 
-		private string deleteStmtId;
-		protected string _deleteStmtId
+		private string _deleteStmtId;
+
+		protected string DeleteStmtId
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(deleteStmtId))
-					deleteStmtId = string.Format("{0}.Delete{0}ById", _typeName);
+				if (string.IsNullOrEmpty(_deleteStmtId))
+					_deleteStmtId = string.Format("{0}.Delete{0}ById", _typeName);
 
-				return deleteStmtId;
+				return _deleteStmtId;
 			}
 		}
 
 		public virtual T Get(T item)
 		{
-			return _mapper.QueryForObject<T>(_getStmtId, item.Id);
+			return Mapper.QueryForObject<T>(GetStmtId, item.Id);
 		}
 
 		public virtual void Insert(T item)
 		{
-			_mapper.Insert(_insertStmtId, item);
+			Mapper.Insert(InsertStmtId, item);
 		}
 
 		public virtual int Update(T item)
 		{
-			return _mapper.Update(_updateStmtId, item);
+			return Mapper.Update(UpdateStmtId, item);
 		}
 
 		public virtual int Delete(T item)
 		{
-			return _mapper.Delete(_deleteStmtId, item.Id);
+			return Mapper.Delete(DeleteStmtId, item.Id);
 		}
 	}
 }
