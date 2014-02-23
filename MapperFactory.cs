@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.IO;
+using System.Linq;
 using System.Reflection;
 using IBatisNet.DataMapper;
 using IBatisNet.DataMapper.Configuration;
@@ -14,21 +14,10 @@ namespace ProphetsWay.MyBatisTools
 		public static ISqlMapper GenerateMapper(this Assembly callingAssembly)
 		{
 			var assemblyName = callingAssembly.ManifestModule.Name;
-
+			
 			Logger.Debug(string.Format("Generating an ISqlMapper for {0}", assemblyName));
 
 			var builderProps = new NameValueCollection();
-
-			var assemblyUri = new Uri(callingAssembly.CodeBase);
-			var assemblyFile = new FileInfo(assemblyUri.LocalPath);
-
-			if(assemblyFile.Directory == null)
-				throw new NullReferenceException(string.Format("There was a problem estabishing the Directory for the assembly file [{0}].", assemblyFile.FullName));
-
-			var assemblyPath = assemblyFile.Directory.FullName;
-			var assemblyParts = assemblyName.Split('.');
-			var assemblyLength = assemblyParts.Length;
-
 
 			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["MyBatisDBUserName"]))
 				builderProps.Add("username", ConfigurationManager.AppSettings["MyBatisDBUserName"]);
@@ -39,16 +28,13 @@ namespace ProphetsWay.MyBatisTools
 			if (ConfigurationManager.ConnectionStrings["MyBatisDBConnection"] != null)
 				builderProps.Add("connectionString", ConfigurationManager.ConnectionStrings["MyBatisDBConnection"].ConnectionString);
 
-
 			var builder = new DomSqlMapBuilder { ValidateSqlMapConfig = true, Properties = builderProps };
+			var resources = callingAssembly.GetManifestResourceNames();
 
 			try
 			{
-				var mapper = builder.Configure(
-					string.Format("{0}{1}SqlMap.{2}.config",
-								  assemblyPath,
-								  Path.DirectorySeparatorChar,
-								  assemblyParts[assemblyLength - 2]));
+				var cfgResourceName = resources.Single(x => x.StartsWith(string.Format("{0}.SqlMap.", callingAssembly.GetName().Name)) && x.EndsWith(".config"));
+				var mapper = builder.Configure(callingAssembly.GetManifestResourceStream(cfgResourceName));
 
 				return mapper;
 			}
