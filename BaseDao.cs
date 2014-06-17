@@ -13,7 +13,7 @@ namespace ProphetsWay.MyBatisTools
 	}
 
 	public abstract class BaseDao<T> : BaseDao, IBaseDao<T>
-		where T : BaseItem
+		where T : IBaseItem
 	{
 		protected BaseDao(ISqlMapper mapper)
 			: base(mapper)
