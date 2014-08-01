@@ -1,4 +1,5 @@
-﻿using IBatisNet.DataMapper;
+﻿using System.Configuration;
+using IBatisNet.DataMapper;
 
 namespace ProphetsWay.MyBatisTools
 {
@@ -13,16 +14,28 @@ namespace ProphetsWay.MyBatisTools
 	}
 
 	public abstract class BaseDao<T> : BaseDao, IBaseDao<T>
-		where T : IBaseItem
 	{
 		protected BaseDao(ISqlMapper mapper)
 			: base(mapper)
 		{
 			_typeName = typeof (T).Name;
+			_dbSpecificStmtId = string.Empty;
+
+			var connStr = ConfigurationManager.ConnectionStrings["MyBatisDBConnectionString"];
+			if (connStr != null)
+			{
+				var providerName = connStr.ProviderName;
+
+				if (providerName.ToLower().StartsWith("sqlserver"))
+					_dbSpecificStmtId = "_sqlserver";
+
+				if (providerName.ToLower().StartsWith("sqlite"))
+					_dbSpecificStmtId = "_sqlite";
+			}
 		}
 
 		private readonly string _typeName;
-
+		private readonly string _dbSpecificStmtId;
 		private string _getStmtId;
 
 		protected string GetStmtId
@@ -43,7 +56,7 @@ namespace ProphetsWay.MyBatisTools
 			get
 			{
 				if (string.IsNullOrEmpty(_insertStmtId))
-					_insertStmtId = string.Format("{0}.Insert{0}", _typeName);
+					_insertStmtId = string.Format("{0}.Insert{0}{1}", _typeName, _dbSpecificStmtId);
 
 				return _insertStmtId;
 			}
@@ -77,7 +90,7 @@ namespace ProphetsWay.MyBatisTools
 
 		public virtual T Get(T item)
 		{
-			return Mapper.QueryForObject<T>(GetStmtId, item.Id);
+			return Mapper.QueryForObject<T>(GetStmtId, item);
 		}
 
 		public virtual void Insert(T item)
@@ -92,7 +105,7 @@ namespace ProphetsWay.MyBatisTools
 
 		public virtual int Delete(T item)
 		{
-			return Mapper.Delete(DeleteStmtId, item.Id);
+			return Mapper.Delete(DeleteStmtId, item);
 		}
 	}
 }
