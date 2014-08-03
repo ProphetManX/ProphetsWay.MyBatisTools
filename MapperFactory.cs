@@ -25,10 +25,10 @@ namespace ProphetsWay.MyBatisTools
 			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["MyBatisDBPassword"]))
 				builderProps.Add("password", ConfigurationManager.AppSettings["MyBatisDBPassword"]);
 
-			if (ConfigurationManager.ConnectionStrings["MyBatisDBConnectionString"] != null)
+			if (ConfigurationManager.ConnectionStrings["MyBatisDBConnection"] != null)
 			{
-				builderProps.Add("connectionString", ConfigurationManager.ConnectionStrings["MyBatisDBConnectionString"].ConnectionString);
-				builderProps.Add("provider", ConfigurationManager.ConnectionStrings["MyBatisDBConnectionString"].ProviderName);
+				builderProps.Add("connectionString", ConfigurationManager.ConnectionStrings["MyBatisDBConnection"].ConnectionString);
+				builderProps.Add("provider", ConfigurationManager.ConnectionStrings["MyBatisDBConnection"].ProviderName);
 			}
 
 			var builder = new DomSqlMapBuilder { ValidateSqlMapConfig = true, Properties = builderProps };
