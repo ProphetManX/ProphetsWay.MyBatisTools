@@ -125,12 +125,12 @@ namespace ProphetsWay.MyBatisTools
 			return GatedDelete(DeleteStmtId, item);
 		}
 
-		protected IList<T> GatedQueryForList(string stmtId, object obj)
+		protected IList<T> GatedQueryForList(string stmtId, object obj = null)
 		{
 			return GatedQueryForList<T>(stmtId, obj);
 		}
 
-		protected IList<T2> GatedQueryForList<T2>(string stmtId, object obj)
+		protected IList<T2> GatedQueryForList<T2>(string stmtId, object obj = null)
 		{
 			if (_gatedQueries)
 				try
@@ -144,9 +144,9 @@ namespace ProphetsWay.MyBatisTools
 				}
 
 			return Mapper.QueryForList<T2>(stmtId, obj);
-		} 
+		}
 
-		protected int GatedDelete(string stmtId, object obj)
+		protected int GatedDelete(string stmtId, object obj = null)
 		{
 			if (_gatedQueries)
 				try
@@ -162,12 +162,12 @@ namespace ProphetsWay.MyBatisTools
 			return Mapper.Delete(stmtId, obj);
 		}
 
-		protected T GatedQueryForObject(string stmtId, object obj)
+		protected T GatedQueryForObject(string stmtId, object obj = null)
 		{
 			return GatedQueryForObject<T>(stmtId, obj);
 		}
 
-		protected T2 GatedQueryForObject<T2>(string stmtId, object obj)
+		protected T2 GatedQueryForObject<T2>(string stmtId, object obj = null)
 		{
 			if (UseGate)
 				try
@@ -183,7 +183,7 @@ namespace ProphetsWay.MyBatisTools
 			return Mapper.QueryForObject<T2>(stmtId, obj);
 		}
 
-		protected int GatedUpdate(string stmtId, object obj)
+		protected int GatedUpdate(string stmtId, object obj = null)
 		{
 			if (UseGate)
 				try
@@ -199,7 +199,7 @@ namespace ProphetsWay.MyBatisTools
 			return Mapper.Update(stmtId, obj);
 		}
 
-		protected void GatedInsert(string stmtId, object obj)
+		protected void GatedInsert(string stmtId, object obj = null)
 		{
 			if (_gatedQueries)
 				try
