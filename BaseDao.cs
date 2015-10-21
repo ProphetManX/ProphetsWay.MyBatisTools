@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Reflection;
 using System.Threading;
 using IBatisNet.DataMapper;
 
@@ -15,7 +17,7 @@ namespace ProphetsWay.MyBatisTools
 		}
 	}
 
-	public abstract class BaseDao<T> : BaseDao, IBaseDao<T>
+	public abstract class BaseDao<T> : BaseDao, IBaseDao<T> where T : class, new()
 	{
 		protected BaseDao(ISqlMapper mapper, Semaphore queue = null)
 			: base(mapper)
@@ -26,16 +28,22 @@ namespace ProphetsWay.MyBatisTools
 			_typeName = typeof (T).Name;
 			_dbSpecificStmtId = string.Empty;
 
-			var connStr = ConfigurationManager.ConnectionStrings["MyBatisDBConnection"];
-			if (connStr != null)
+			bool providerSpecific;
+			var providerSpecificStr = ConfigurationManager.AppSettings["ProviderSpecificQueries"];
+
+			if (bool.TryParse(providerSpecificStr, out providerSpecific) && providerSpecific)
 			{
-				var providerName = connStr.ProviderName;
+				var connStr = ConfigurationManager.ConnectionStrings["MyBatisDBConnection"];
+				if (connStr != null)
+				{
+					var providerName = connStr.ProviderName;
 
-				if (providerName.ToLower().StartsWith("sqlserver"))
-					_dbSpecificStmtId = "_sqlserver";
+					if (providerName.ToLower().StartsWith("sqlserver"))
+						_dbSpecificStmtId = "_sqlserver";
 
-				if (providerName.ToLower().StartsWith("sqlite"))
-					_dbSpecificStmtId = "_sqlite";
+					if (providerName.ToLower().StartsWith("sqlite"))
+						_dbSpecificStmtId = "_sqlite";
+				}
 			}
 		}
 
@@ -107,28 +115,96 @@ namespace ProphetsWay.MyBatisTools
 
 		public virtual T Get(T item)
 		{
-			return GatedQueryForObject(GetStmtId, item);
+			try
+			{
+				return GatedQueryForObject(GetStmtId, item);
+			}
+			catch (Exception ex)
+			{
+				throw HandleException("Get", item, ex);
+			}
 		}
 
 		public virtual void Insert(T item)
 		{
-			GatedInsert(InsertStmtId, item);
+			try
+			{
+				GatedInsert(InsertStmtId, item);
+			}
+			catch (Exception ex)
+			{
+				throw HandleException("Insert", item, ex);
+			}
 		}
 
 		public virtual int Update(T item)
 		{
-			return GatedUpdate(UpdateStmtId, item);
+			try
+			{
+				return GatedUpdate(UpdateStmtId, item);
+			}
+			catch (Exception ex)
+			{
+				throw HandleException("Update", item, ex);
+			}
 		}
 
 		public virtual int Delete(T item)
 		{
-			return GatedDelete(DeleteStmtId, item);
+			try
+			{
+				return GatedDelete(DeleteStmtId, item);
+			}
+			catch (Exception ex)
+			{
+				throw HandleException("Delete", item, ex);
+			}
 		}
 
-		protected IList<T> GatedQueryForList(string stmtId, object obj = null)
+		protected IList<T> GatedQueryForList(string stmtId, T obj = null)
 		{
-			return GatedQueryForList<T>(stmtId, obj);
+			try
+			{
+				return GatedQueryForList<T>(stmtId, obj);
+			}
+			catch (Exception ex)
+			{
+				throw HandleException("GetListing", obj, ex);
+			}
 		}
+
+		#region Exception Handling 
+
+		protected Exception HandleException(string actionType, object item, Exception ex)
+		{
+			if (item == null)
+				return ex;
+
+			var idProp = GetIdProperty(item);
+			if (idProp == null)
+				return ex;
+
+			var id = idProp.GetValue(item);
+			return new Exception(GetExceptionMessage(actionType, item, id), ex);
+		}
+
+		private string GetItemType(object item)
+		{
+			return item.GetType().Name;
+		}
+
+		private PropertyInfo GetIdProperty(object item)
+		{
+			return item.GetType().GetProperty(string.Format("{0}Id", GetItemType(item)));
+		}
+
+		private string GetExceptionMessage(string actionType, object item, object id)
+		{
+			return string.Format("Unable to '{0}' item of type [{1}] from the database with the id: {2}", actionType,
+				GetItemType(item), id);
+		}
+
+		#endregion
 
 		protected IList<T2> GatedQueryForList<T2>(string stmtId, object obj = null)
 		{

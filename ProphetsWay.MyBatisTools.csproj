@@ -52,8 +52,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IBatisNet.Common, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\TFS Source Code\TAP\Shared Libraries\IBatisNet.Common.dll</HintPath>
+    </Reference>
     <Reference Include="IBatisNet.DataMapper">
-      <HintPath>..\Libraries\MyBatis\Ibatis.DataMapper.1.6.2.bin\IBatisNet.DataMapper.dll</HintPath>
+      <HintPath>..\..\TFS Source Code\TAP\Shared Libraries\IBatisNet.DataMapper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
