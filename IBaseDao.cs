@@ -1,4 +1,6 @@
-﻿namespace ProphetsWay.MyBatisTools
+﻿using System.Collections.Generic;
+
+namespace ProphetsWay.MyBatisTools
 {
 	/// <summary>
 	/// Requires that all IDaos require the basic CRUD calls
@@ -16,5 +18,14 @@
 		int Update(T item);
 
 		int Delete(T item);
+	}
+
+	/// <summary>
+	/// Requires that all IDaos for Drop Down List items have a "GetAll" method
+	/// </summary>
+	/// <typeparam name="TGenericDDLItem"></typeparam>
+	public interface IBaseDDLDao<TGenericDDLItem>  : IBaseDao<TGenericDDLItem> where TGenericDDLItem : BaseDDLItemClass
+	{
+		IList<TGenericDDLItem> GetAll(TGenericDDLItem item);
 	}
 }

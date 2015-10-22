@@ -17,6 +17,40 @@ namespace ProphetsWay.MyBatisTools
 		}
 	}
 
+	public abstract class BaseDDLDao<T> : BaseDao<T>, IBaseDDLDao<T> 
+		where T : BaseDDLItemClass, new()
+	{
+		protected BaseDDLDao(ISqlMapper mapper, Semaphore queue = null) : base(mapper, queue)
+		{
+			
+		}
+
+		private string _getAllStmtId;
+
+		protected string GetAllStmtId
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(_getAllStmtId))
+					_getAllStmtId = string.Format("{0}.GetAll{0}{1}", _typeName, _dbSpecificStmtId);
+
+				return _getAllStmtId;
+			}
+		}
+
+		public virtual IList<T> GetAll(T item)
+		{
+			try
+			{
+				return GatedQueryForList(GetAllStmtId);
+			}
+			catch (Exception ex)
+			{
+				throw HandleException("GetAll", item, ex);
+			}
+		}
+	}
+
 	public abstract class BaseDao<T> : BaseDao, IBaseDao<T> where T : class, new()
 	{
 		protected BaseDao(ISqlMapper mapper, Semaphore queue = null)
@@ -47,8 +81,8 @@ namespace ProphetsWay.MyBatisTools
 			}
 		}
 
-		private readonly string _typeName;
-		private readonly string _dbSpecificStmtId;
+		protected readonly string _typeName;
+		protected readonly string _dbSpecificStmtId;
 		private string _getStmtId;
 		private readonly bool _gatedQueries;
 		private readonly Semaphore _gate;
