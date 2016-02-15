@@ -73,7 +73,7 @@ namespace ProphetsWay.MyBatisTools
 			_mapper = GetType().Assembly.GenerateMapper();
 		}
 
-		public T Get<T>(int id) where T : class, new()
+		public T Get<T>(long id) where T : class, new()
 		{
 			var tType = typeof(T);
 			var mtd = GetType().GetMethod("Get", new[] { tType });
@@ -90,6 +90,11 @@ namespace ProphetsWay.MyBatisTools
 			prop.SetValue(input, id);
 
 			return mtd.Invoke(this, new object[] { input }) as T;
+		}
+
+		public T Get<T>(int id) where T : class, new()
+		{
+			return Get<T>((long) id);
 		}
 
 		public void TransactionStart()

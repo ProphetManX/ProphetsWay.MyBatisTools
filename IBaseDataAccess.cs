@@ -10,6 +10,8 @@ namespace ProphetsWay.MyBatisTools
 
 	public interface IBaseDataAccess
 	{
+		T Get<T>(long id) where T : class, new();
+
 		T Get<T>(int id) where T : class, new();
 
 		void TransactionStart();
