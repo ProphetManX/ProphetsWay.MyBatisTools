@@ -19,6 +19,9 @@ namespace ProphetsWay.MyBatisTools
 
 			var builderProps = new NameValueCollection();
 
+			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["MyBatisDBServerName"]))
+				builderProps.Add("servername", ConfigurationManager.AppSettings["MyBatisDBServerName"]);
+
 			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["MyBatisDBUserName"]))
 				builderProps.Add("username", ConfigurationManager.AppSettings["MyBatisDBUserName"]);
 

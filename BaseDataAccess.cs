@@ -73,7 +73,17 @@ namespace ProphetsWay.MyBatisTools
 			_mapper = GetType().Assembly.GenerateMapper();
 		}
 
-		public T Get<T>(long id) where T : class, new()
+		public virtual T Get<T>(int id) where T : class, new()
+		{
+			return Get<T>((object) id);
+		}
+
+		public virtual T Get<T>(long id) where T : class, new()
+		{
+			return Get<T>((object) id);
+		}
+
+		private T Get<T>(object id) where T : class, new()
 		{
 			var tType = typeof(T);
 			var mtd = GetType().GetMethod("Get", new[] { tType });
@@ -82,10 +92,10 @@ namespace ProphetsWay.MyBatisTools
 				throw new Exception(string.Format("Unable to find a 'Get' method for the type [{0}] specified.", typeof(T).Name));
 
 			var input = new T();
-			var prop = tType.GetProperty(string.Format("{0}Id", tType.Name));
+			var prop = tType.GetProperty(string.Format("{0}Id", tType.Name)) ?? tType.GetProperty("Id");
 
 			if (prop == null)
-				prop = tType.GetProperty("Id");
+				throw new Exception(string.Format("Unable to find the 'Id' field on this type of object:  {0}", typeof(T).Name));
 
 			prop.SetValue(input, id);
 
