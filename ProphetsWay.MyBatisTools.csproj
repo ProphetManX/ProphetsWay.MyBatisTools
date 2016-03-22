@@ -92,12 +92,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProphetsWay.Utilities\ProphetsWay.Utilities.csproj">
-      <Project>{7592b56d-f90b-41ac-95fa-edfe66bd8b7f}</Project>
-      <Name>ProphetsWay.Utilities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

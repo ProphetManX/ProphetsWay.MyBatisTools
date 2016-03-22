@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using IBatisNet.DataMapper;
 using IBatisNet.DataMapper.Configuration;
+using log4net.Repository.Hierarchy;
 using ProphetsWay.Utilities;
 
 namespace ProphetsWay.MyBatisTools
@@ -39,14 +40,14 @@ namespace ProphetsWay.MyBatisTools
 
 			try
 			{
-				var cfgResourceName = resources.Single(x => x.StartsWith(string.Format("{0}.SqlMap.", callingAssembly.GetName().Name)) && x.EndsWith(".config"));
+				var cfgResourceName = resources.Single(x => x.StartsWith($"{callingAssembly.GetName().Name}.SqlMap.") && x.EndsWith(".config"));
 				var mapper = builder.Configure(callingAssembly.GetManifestResourceStream(cfgResourceName));
 
 				return mapper;
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(ex, string.Format("There was a problem when generating the SqlMapper for {0}", assemblyName));
+				Logger.Error(ex, $"There was a problem when generating the SqlMapper for {assemblyName}");
 
 				throw;
 			}

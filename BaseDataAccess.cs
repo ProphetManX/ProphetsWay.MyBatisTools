@@ -14,7 +14,7 @@ namespace ProphetsWay.MyBatisTools
 			var mtd = GetType().GetMethod("GetAll", new[] { tType });
 
 			if (mtd == null)
-				throw new Exception(string.Format("Unable to find a 'GetAll' method for the type [{0}] specified.", tType.Name));
+				throw new Exception($"Unable to find a 'GetAll' method for the type [{tType.Name}] specified.");
 
 			return mtd.Invoke(this, new object[] { item }) as IList<T>;
 		}
@@ -25,7 +25,7 @@ namespace ProphetsWay.MyBatisTools
 			var mtd = GetType().GetMethod("Get", new[] { tType });
 
 			if (mtd == null)
-				throw new Exception(string.Format("Unable to find a 'Get' method for the type [{0}] specified.", tType.Name));
+				throw new Exception($"Unable to find a 'Get' method for the type [{tType.Name}] specified.");
 
 			return mtd.Invoke(this, new object[] { item }) as TGenericDDLItem;
 		}
@@ -36,7 +36,7 @@ namespace ProphetsWay.MyBatisTools
 			var mtd = GetType().GetMethod("Update", new[] { tType });
 
 			if (mtd == null)
-				throw new Exception(string.Format("Unable to find a 'Update' method for the type [{0}] specified.", tType.Name));
+				throw new Exception($"Unable to find a 'Update' method for the type [{tType.Name}] specified.");
 
 			return (int)mtd.Invoke(this, new object[] { item });
 		}
@@ -47,7 +47,7 @@ namespace ProphetsWay.MyBatisTools
 			var mtd = GetType().GetMethod("Delete", new[] { tType });
 
 			if (mtd == null)
-				throw new Exception(string.Format("Unable to find a 'Delete' method for the type [{0}] specified.", tType.Name));
+				throw new Exception($"Unable to find a 'Delete' method for the type [{tType.Name}] specified.");
 
 			return (int)mtd.Invoke(this, new object[] { item });
 		}
@@ -58,7 +58,7 @@ namespace ProphetsWay.MyBatisTools
 			var mtd = GetType().GetMethod("Insert", new[] { tType });
 
 			if (mtd == null)
-				throw new Exception(string.Format("Unable to find a 'Insert' method for the type [{0}] specified.", tType.Name));
+				throw new Exception($"Unable to find a 'Insert' method for the type [{tType.Name}] specified.");
 
 			mtd.Invoke(this, new object[] { item });
 		}
@@ -89,22 +89,17 @@ namespace ProphetsWay.MyBatisTools
 			var mtd = GetType().GetMethod("Get", new[] { tType });
 
 			if (mtd == null)
-				throw new Exception(string.Format("Unable to find a 'Get' method for the type [{0}] specified.", typeof(T).Name));
+				throw new Exception($"Unable to find a 'Get' method for the type [{typeof (T).Name}] specified.");
 
 			var input = new T();
-			var prop = tType.GetProperty(string.Format("{0}Id", tType.Name)) ?? tType.GetProperty("Id");
+			var prop = tType.GetProperty($"{tType.Name}Id") ?? tType.GetProperty("Id");
 
 			if (prop == null)
-				throw new Exception(string.Format("Unable to find the 'Id' field on this type of object:  {0}", typeof(T).Name));
+				throw new Exception($"Unable to find the 'Id' field on this type of object:  {typeof (T).Name}");
 
 			prop.SetValue(input, id);
 
 			return mtd.Invoke(this, new object[] { input }) as T;
-		}
-
-		public T Get<T>(int id) where T : class, new()
-		{
-			return Get<T>((long) id);
 		}
 
 		public void TransactionStart()
