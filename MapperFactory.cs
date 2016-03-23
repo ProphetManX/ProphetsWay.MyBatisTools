@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using IBatisNet.DataMapper;
 using IBatisNet.DataMapper.Configuration;
-using log4net.Repository.Hierarchy;
 using ProphetsWay.Utilities;
 
 namespace ProphetsWay.MyBatisTools
@@ -16,7 +15,7 @@ namespace ProphetsWay.MyBatisTools
 		{
 			var assemblyName = callingAssembly.ManifestModule.Name;
 			
-			Logger.Debug(string.Format("Generating an ISqlMapper for {0}", assemblyName));
+			Logger.Debug($"Generating an ISqlMapper for {assemblyName}");
 
 			var builderProps = new NameValueCollection();
 
