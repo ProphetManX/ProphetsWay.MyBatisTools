@@ -94,6 +94,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProphetsWay.Utilities\ProphetsWay.Utilities.csproj">
+      <Project>{BC142795-AB72-4F17-9A84-07ED2878A0FE}</Project>
+      <Name>ProphetsWay.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
