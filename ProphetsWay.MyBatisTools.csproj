@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseAuditDao.cs" />
     <Compile Include="BaseDao.cs" />
     <Compile Include="BaseDataAccess.cs" />
     <Compile Include="BaseDDLItemClass.cs" />

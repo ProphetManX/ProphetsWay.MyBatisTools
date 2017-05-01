@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Dynamic;
 using System.Reflection;
 using System.Threading;
 using IBatisNet.DataMapper;
@@ -9,18 +10,21 @@ namespace ProphetsWay.MyBatisTools
 {
 	public abstract class BaseDao
 	{
-		protected ISqlMapper Mapper { get; set; }
-
-		protected BaseDao(ISqlMapper mapper)
+		protected BaseDao(ISqlMapper mapper, int? userId)
 		{
 			Mapper = mapper;
+			UserId = userId;
 		}
+
+		protected ISqlMapper Mapper { get; set; }
+
+		protected int? UserId { get; set; }
 	}
 
 	public abstract class BaseDDLDao<T> : BaseDao<T>, IBaseDDLDao<T> 
 		where T : BaseDDLItemClass, new()
 	{
-		protected BaseDDLDao(ISqlMapper mapper, Semaphore queue = null) : base(mapper, queue)
+		protected BaseDDLDao(ISqlMapper mapper, int? userId = null, Semaphore queue = null) : base(mapper, userId, queue)
 		{
 			
 		}
@@ -53,14 +57,16 @@ namespace ProphetsWay.MyBatisTools
 
 	public abstract class BaseDao<T> : BaseDao, IBaseDao<T> where T : class, new()
 	{
-		protected BaseDao(ISqlMapper mapper, Semaphore queue = null)
-			: base(mapper)
+		protected BaseDao(ISqlMapper mapper, int? userId = null, Semaphore queue = null, BaseAuditDao auditor = null)
+			: base(mapper, userId)
 		{
 			_gatedQueries = queue != null;
 			_gate = queue;
 
 			_typeName = typeof (T).Name;
 			_dbSpecificStmtId = string.Empty;
+
+			_auditor = auditor;
 
 			bool providerSpecific;
 			var providerSpecificStr = ConfigurationManager.AppSettings["ProviderSpecificQueries"];
@@ -86,6 +92,7 @@ namespace ProphetsWay.MyBatisTools
 		private string _getStmtId;
 		private readonly bool _gatedQueries;
 		private readonly Semaphore _gate;
+		private readonly BaseAuditDao _auditor;
 
 		protected Semaphore Gate
 		{
@@ -163,6 +170,15 @@ namespace ProphetsWay.MyBatisTools
 		{
 			try
 			{
+				//var param = new Dictionary<string, object>();
+
+				//var t = typeof (T);
+				//var props = t.GetProperties();
+				//foreach (var prop in props)
+				//	param.Add(prop.Name, prop.GetValue(item));
+
+				//param.Add("_UserId", UserId);
+
 				GatedInsert(InsertStmtId, item);
 			}
 			catch (Exception ex)
@@ -175,6 +191,11 @@ namespace ProphetsWay.MyBatisTools
 		{
 			try
 			{
+				//dynamic dItem = item;
+				//dItem._UserId = UserId;
+
+				_auditor?.AuditChange(item);
+
 				return GatedUpdate(UpdateStmtId, item);
 			}
 			catch (Exception ex)
@@ -187,6 +208,11 @@ namespace ProphetsWay.MyBatisTools
 		{
 			try
 			{
+				//dynamic dItem = item;
+				//dItem._UserId = UserId;
+
+				_auditor?.AuditDelete(item);
+
 				return GatedDelete(DeleteStmtId, item);
 			}
 			catch (Exception ex)
