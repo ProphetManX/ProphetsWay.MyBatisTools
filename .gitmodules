@@ -1,3 +1,6 @@
 [submodule "ProphetsWay.BaseDataAccess"]
 	path = ProphetsWay.BaseDataAccess
 	url = https://github.com/ProphetManX/ProphetsWay.BaseDataAccess.git
+[submodule "ProphetsWay.Utilities"]
+	path = ProphetsWay.Utilities
+	url = https://github.com/ProphetManX/ProphetsWay.Utilities.git
