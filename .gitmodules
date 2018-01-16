@@ -1,0 +1,3 @@
+[submodule "ProphetsWay.BaseDataAccess"]
+	path = ProphetsWay.BaseDataAccess
+	url = http://git.prophetsway.net/ProphetsWay.BaseDataAccess.git
