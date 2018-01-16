@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using IBatisNet.DataMapper;
+using ProphetsWay.BaseDataAccess;
 
 namespace ProphetsWay.MyBatisTools
 {
 	public abstract class BaseDataAccess<TGenericDDLItem> : BaseDataAccess, IBaseDataAccess<TGenericDDLItem> 
-		where TGenericDDLItem : BaseDDLItemClass
+		where TGenericDDLItem : BaseDDLEntity
 	{
 		public IList<T> GetAll<T>() where T : TGenericDDLItem, new()
 		{
@@ -73,17 +74,30 @@ namespace ProphetsWay.MyBatisTools
 			_mapper = GetType().Assembly.GenerateMapper();
 		}
 
-		public virtual T Get<T>(int id) where T : class, new()
+		public virtual T Get<T>(int id) where T : BaseEntity,new()
 		{
 			return Get<T>((object) id);
 		}
 
-		public virtual T Get<T>(long id) where T : class, new()
+		public virtual T Get<T>(long id) where T : BaseEntity, new()
 		{
 			return Get<T>((object) id);
 		}
 
-		private T Get<T>(object id) where T : class, new()
+		public virtual IList<T> GetAll<T>(T item) where T : BaseEntity, new()
+		{
+			var tType = typeof(T);
+			var mtd = GetType().GetMethod("GetAll", new[] {tType});
+
+			if (mtd == null)
+				throw new Exception($"Unable to find a 'GetAll' method for the type [{typeof(T).Name}] specified.");
+
+			var input = new T();
+
+			return mtd.Invoke(this, new object[] {input}) as IList<T>;
+		}
+
+		private T Get<T>(object id) where T : BaseEntity, new()
 		{
 			var tType = typeof(T);
 			var mtd = GetType().GetMethod("Get", new[] { tType });

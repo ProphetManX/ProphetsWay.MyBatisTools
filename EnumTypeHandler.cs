@@ -18,10 +18,7 @@ namespace ProphetsWay.MyBatisTools
 			return s;
 		}
 
-		public object NullValue
-		{
-			get { return default(T); }
-		}
+		public object NullValue => default(T);
 	}
 
 	public abstract class EnumTypeAsStringHandler<T> : EnumTypeHandler<T>

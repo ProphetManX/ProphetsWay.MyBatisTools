@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Dynamic;
 using System.Reflection;
 using System.Threading;
 using IBatisNet.DataMapper;
+using ProphetsWay.BaseDataAccess;
 
 namespace ProphetsWay.MyBatisTools
 {
@@ -22,7 +22,7 @@ namespace ProphetsWay.MyBatisTools
 	}
 
 	public abstract class BaseDDLDao<T> : BaseDao<T>, IBaseDDLDao<T> 
-		where T : BaseDDLItemClass, new()
+		where T : BaseDDLEntity, new()
 	{
 		protected BaseDDLDao(ISqlMapper mapper, int? userId = null, Semaphore queue = null) : base(mapper, userId, queue)
 		{
@@ -53,6 +53,39 @@ namespace ProphetsWay.MyBatisTools
 				throw HandleException("GetAll", item, ex);
 			}
 		}
+	}
+
+	public abstract class BaseGetAllDao<T> : BaseDao<T>, IBaseGetAllDao<T> where T : BaseEntity, new()
+	{
+		public BaseGetAllDao(ISqlMapper mapper, int? userId = null, Semaphore queue = null, BaseAuditDao auditor = null) : base(mapper, userId, queue, auditor)
+		{
+
+		}
+
+		private string _getAllStmtId;
+		protected string GetAllStmtId
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(_getAllStmtId))
+					_getAllStmtId = $"{_typeName}.GetAll";
+
+				return _getAllStmtId;
+			}
+		}
+
+		public virtual IList<T> GetAll(T item)
+		{
+			try
+			{
+				return GatedQueryForList(GetStmtId);
+			}
+			catch (Exception ex)
+			{
+				throw HandleException("GetAll", item, ex);
+			}
+		}
+
 	}
 
 	public abstract class BaseDao<T> : BaseDao, IBaseDao<T> where T : class, new()

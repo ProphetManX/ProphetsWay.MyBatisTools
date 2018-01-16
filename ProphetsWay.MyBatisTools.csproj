@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProphetsWay.MyBatisTools</RootNamespace>
     <AssemblyName>ProphetsWay.MyBatisTools</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -57,16 +57,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="IBatisNet.Common, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
-      <HintPath>..\ProphetsWay.Projects\packages\IBatisNet45.1.6.2\lib\net45\IBatisNet.Common.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\ProphetsWay.Mp3Assimilator\packages\IBatisNet45.1.6.2\lib\net45\IBatisNet.Common.dll</HintPath>
     </Reference>
     <Reference Include="IBatisNet.Common.Logging.Log4Net, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\ProphetsWay.Projects\packages\IBatisNet45.1.6.2\lib\net45\IBatisNet.Common.Logging.Log4Net.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\ProphetsWay.Mp3Assimilator\packages\IBatisNet45.1.6.2\lib\net45\IBatisNet.Common.Logging.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="IBatisNet.DataMapper, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
-      <HintPath>..\ProphetsWay.Projects\packages\IBatisNet45.1.6.2\lib\net45\IBatisNet.DataMapper.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\ProphetsWay.Mp3Assimilator\packages\IBatisNet45.1.6.2\lib\net45\IBatisNet.DataMapper.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\Equity Genome\src\packages\log4net.2.0.4\lib\net45-full\log4net.dll</HintPath>
@@ -75,6 +72,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,21 +83,12 @@
     <Compile Include="BaseAuditDao.cs" />
     <Compile Include="BaseDao.cs" />
     <Compile Include="BaseDataAccess.cs" />
-    <Compile Include="BaseDDLItemClass.cs" />
     <Compile Include="EnumTypeHandler.cs" />
-    <Compile Include="IBaseDao.cs" />
-    <Compile Include="IBaseDataAccess.cs" />
     <Compile Include="MapperFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ProphetsWay.Utilities\ProphetsWay.Utilities.csproj">
-      <Project>{BC142795-AB72-4F17-9A84-07ED2878A0FE}</Project>
-      <Name>ProphetsWay.Utilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
