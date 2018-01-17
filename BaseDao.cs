@@ -90,6 +90,8 @@ namespace ProphetsWay.MyBatisTools
 
 	public abstract class BaseDao<T> : BaseDao, IBaseDao<T> where T : class, new()
 	{
+        protected BaseDao(ISqlMapper mapper, Semaphore queue = null, BaseAuditDao auditor = null) : this(mapper, null, queue, auditor) { }
+
 		protected BaseDao(ISqlMapper mapper, int? userId = null, Semaphore queue = null, BaseAuditDao auditor = null)
 			: base(mapper, userId)
 		{

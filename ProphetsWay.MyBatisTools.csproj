@@ -89,11 +89,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="ProphetsWay.BaseDataAccess\ProphetsWay.BaseDataAccess.csproj">
-      <Project>{e9eb348b-be20-44a9-a06c-cbe97e2d711c}</Project>
+    <ProjectReference Include="..\ProphetsWay.BaseDataAccess\ProphetsWay.BaseDataAccess.csproj">
+      <Project>{6c42e9b7-0cf8-4a99-b7cf-4242ee8e957f}</Project>
       <Name>ProphetsWay.BaseDataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="ProphetsWay.Utilities\ProphetsWay.Utilities.csproj">
+    <ProjectReference Include="..\ProphetsWay.Utilities\ProphetsWay.Utilities.csproj">
       <Project>{7592b56d-f90b-41ac-95fa-edfe66bd8b7f}</Project>
       <Name>ProphetsWay.Utilities</Name>
     </ProjectReference>
