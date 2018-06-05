@@ -90,7 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProphetsWay.BaseDataAccess\ProphetsWay.BaseDataAccess.csproj">
-      <Project>{6c42e9b7-0cf8-4a99-b7cf-4242ee8e957f}</Project>
+      <Project>{6cf3d9dc-9aaa-4f22-9c8d-f3681e92194d}</Project>
       <Name>ProphetsWay.BaseDataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\ProphetsWay.Utilities\ProphetsWay.Utilities.csproj">

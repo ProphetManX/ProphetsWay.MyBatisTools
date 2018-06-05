@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using IBatisNet.DataMapper;
 using ProphetsWay.BaseDataAccess;
 
@@ -99,13 +100,10 @@ namespace ProphetsWay.MyBatisTools
 
 		private T Get<T>(object id) where T : BaseEntity, new()
 		{
-			var tType = typeof(T);
-			var mtd = GetType().GetMethod("Get", new[] { tType });
-
-			if (mtd == null)
-				throw new Exception($"Unable to find a 'Get' method for the type [{typeof (T).Name}] specified.");
-
+			var mtd = GetMethod<T>("Get");
 			var input = new T();
+			var tType = typeof(T);
+
 			var prop = tType.GetProperty($"{tType.Name}Id") ?? tType.GetProperty("Id");
 
 			if (prop == null)
@@ -114,6 +112,29 @@ namespace ProphetsWay.MyBatisTools
 			prop.SetValue(input, id);
 
 			return mtd.Invoke(this, new object[] { input }) as T;
+		}
+
+		public int Update<T>(T entity) where T : BaseEntity, new()
+		{
+			var mtd = GetMethod<T>("Update");
+			return (int)mtd.Invoke(this, new object[] {entity});
+		}
+
+		public void Insert<T>(T entity) where T : BaseEntity, new()
+		{
+			var mtd = GetMethod<T>("Insert");
+			mtd.Invoke(this, new object[] {entity});
+		}
+
+		private MethodInfo GetMethod<T>(string methodName)
+		{
+			var tType = typeof(T);
+			var mtd = GetType().GetMethod(methodName, new[] { tType });
+
+			if (mtd == null)
+				throw new Exception($"Unable to find a '{methodName}' method for the type [{typeof(T).Name}] specified.");
+
+			return mtd;
 		}
 
 		public void TransactionStart()
